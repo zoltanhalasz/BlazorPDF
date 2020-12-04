@@ -67,8 +67,7 @@ namespace BlazorPDF.Data
             _pdfCell.HorizontalAlignment = Element.ALIGN_CENTER;
             _pdfCell.Border = 0;
             _pdfCell.ExtraParagraphSpace = 0;
-            _pdfTable.AddCell(_pdfCell);
-            
+            _pdfTable.AddCell(_pdfCell);            
             _pdfTable.CompleteRow();     
       
         }
