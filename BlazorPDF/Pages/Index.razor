@@ -1,0 +1,49 @@
+﻿@page "/"
+@using BlazorPDF.Data
+
+@inject IJSRuntime jsruntime
+
+<button class="btn btn-primary" @onclick="ExportListToPdf">Export to PDF</button>
+@if (myStudList != null)
+{
+    <table class="table table-bordered table-responsive-md">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>BirthDay</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var stud in myStudList)
+            {
+                <tr>
+                    <td>@stud.StudentId</td>
+                    <td>@stud.Name</td>
+                    <td>@stud.BirthDay.ToShortDateString()</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+
+    List<Student> myStudList = new List<Student>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var stud = new Student() { StudentId = 1, Name = "Zozo", BirthDay = DateTime.Now.AddDays(-3000) };
+        myStudList.Add(stud);
+        stud = new Student() { StudentId = 2, Name = "Zozo2", BirthDay = DateTime.Now.AddDays(-5000) };
+        myStudList.Add(stud);
+        stud = new Student() { StudentId = 3, Name = "Zozo3", BirthDay = DateTime.Now.AddDays(-6000) };
+        myStudList.Add(stud);
+    }
+
+    private void ExportListToPdf()
+    {
+        RptStudent myRep = new RptStudent();
+        jsruntime.InvokeAsync<Student>("saveAsFile", "studentList.pdf", Convert.ToBase64String(myRep.Report(myStudList)));
+    }
+}
